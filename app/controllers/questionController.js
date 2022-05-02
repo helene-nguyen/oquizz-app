@@ -41,11 +41,9 @@ const questionController = {
     
         } catch(err) {
             res.status(500);
-            res.send("Une erreur inatendu s'est produit");
+            res.send("Une erreur innatendue s'est produit");
             console.error(err);
         }
-
-
 
     }, 
     getUpdate: async (req, res) => {

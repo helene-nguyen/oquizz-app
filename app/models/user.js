@@ -1,24 +1,58 @@
-const sequelize = require('../database');
-const { Model, DataTypes } = require('sequelize');
+//~import modules
+const {
+    Sequelize,
+    Model,
+    DataTypes,
+    Op,
+    literal
+} = require('sequelize');
+//~import DB
+const sequelize = require('./getConnexion')();
 
-class User extends Model {}
+class User extends Model {};
 
 User.init({
-    firstname: DataTypes.TEXT, // Il existe une forme racourrci quand on utilise les params par défaut
-    lastname: DataTypes.TEXT,
+    //~relations
+    id: {
+        type: Sequelize.INTEGER,
+        unique: true,
+        autoIncrement: true,
+        primaryKey: true
+    },
     email: {
-        type: DataTypes.STRING,
+        type: Sequelize.TEXT,
         allowNull: false,
-        unique: true
+        unique: true,
+        /* validate: {
+            isEmail: {
+                msg: "L'addresse e-mail doit être dans un format valide"
+            }
+        } */
     },
     password: {
-        type: DataTypes.STRING,
+        type: Sequelize.TEXT,
+        allowNull: false
+    },
+    firstname: {
+        type: Sequelize.TEXT,
+        allowNull: true
+    },
+    lastname: {
+        type: Sequelize.TEXT,
+        allowNull: true
+    },
+    created_at: {
+        type: Sequelize.DATE,
         allowNull: false,
+        defaultValue: literal('CURRENT_TIMESTAMP')
+    },
+    updated_at: {
+        type: Sequelize.DATE,
+        allowNull: true
     }
 }, {
     sequelize,
-    tableName: "user"
+    tableName: 'user'
 });
-
 
 module.exports = User;

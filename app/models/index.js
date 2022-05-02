@@ -1,112 +1,106 @@
+//~require models
 const Level = require('./level');
-const Question = require('./question');
 const Answer = require('./answer');
+const Question = require('./question');
 const Quiz = require('./quiz');
-const User = require('./user');
 const Tag = require('./tag');
+const User = require('./user');
+const QuizHasTag = require('./quizHasTag');
 
-// https://www.figma.com/file/8WMgiFoYLs0uxSDKxXByoJ/Untitled?node-id=0%3A1
-
-// One To Many 
-
-// Une question à un niveau 
+//~associations
+//^------------Level - Question
 Question.belongsTo(Level, {
-    foreignKey: "level_id",
-    as: "level",
+    foreignKey: 'level_id',
+    as: 'level'
 });
 
-// Un niveau a plein de question
-// On fait appele au champ level_id de Question pour pouvoir réaliser la relation dans le sens inverse
 Level.hasMany(Question, {
-    foreignKey: "level_id",
-    as: "questions"
+    foreignKey: 'level_id',
+    as: 'questions'
 });
 
-// Question Réponse <-> One To Many + One To One
-
-// Question à plusieurs réponses 
-Question.hasMany(Answer, {
-    foreignKey: "question_id",
-    as: "answers"
-});
-
-// Réciproque : Une réponse appartient une question
-Answer.belongsTo(Question, {
-    foreignKey: "question_id",
-    as: "question"
-});
-
-// Liaison valides sur le MCD
-// ATTETION Cas particulier : QUESTION ET REPONSE SONT LIEES DE DEUX FACON ! 
-// Une question à UNE bonne réponse
-Question.belongsTo(Answer, {
-    foreignKey : "answer_id",
-    as: "good_answer"
-});
-
-
-// Question Quiz <-> One To Many // quiz_id sur Question
-
-// Un Quiz possède PLUSIEURS Questions
-// Quiz has Many Questions
-Quiz.hasMany(Question, {
-    foreignKey: "quiz_id",
-    as: "questions"
-});
-
-// Réciproque : UNE question appartient à UN quiz
-// Question belongs to Quiz
+//^-----------Question - Quiz
 Question.belongsTo(Quiz, {
-    foreignKey: "quiz_id",
-    as: "quiz"
-});
-
-// User Quiz <-> One To Many // user_id sur Quiz
-
-// UN Quiz appartient à UN User 
-Quiz.belongsTo(User, {
-    foreignKey: "user_id",
-    as: "user"
-});
-
-// Réciproque : UN User possède PLUSIEURS Quiz
-User.hasMany(Quiz, {
-    foreignKey: "user_id",
-    as: "quizzes"
-});
-
-
-// -------------------------------------------------------
-// UN Quiz possède PLUSIEURS tags
-Quiz.belongsToMany(Tag, {
-    through: "quiz_has_tag",
     foreignKey: 'quiz_id',
+    as: 'quiz'
+});
+
+Quiz.hasMany(Question, {
+    foreignKey: 'quiz_id',
+    as: 'questions'
+});
+
+//^-----------Quiz - User
+Quiz.belongsTo(User, {
+    foreignKey: 'user_id',
+    as: 'author'
+});
+
+User.hasMany(Quiz, {
+    foreignKey: 'user_id',
+    as: 'quiz_list'
+});
+
+
+//^-----------Question - Answer
+Question.hasMany(Answer, {
+    foreignKey: 'question_id',
+    as: 'answers'
+});
+
+Answer.belongsTo(Question, {
+    foreignKey: 'question_id',
+    as: 'question'
+});
+
+Question.belongsTo(Answer, {
+    foreignKey: 'answer_id',
+    as: 'good_answer'
+});
+
+
+//^-----------Quiz - Tag
+Quiz.belongsToMany(Tag, {
+    foreignKey: 'quiz_id',
+    through: 'quiz_has_tag',
     otherKey: 'tag_id',
-    as: "tags",
+    as: 'tags'
 });
 
-// Un Tag possède PLUSIEURS Quiz ... la réciproque
 Tag.belongsToMany(Quiz, {
-    through: "quiz_has_tag",
-    foreignKey: "tag_id",
-    otherKey: "quiz_id",
-    as: "quizzes"
+    foreignKey: 'quiz_id',
+    through: 'quiz_has_tag',
+    otherKey: 'tag_id',
+    as: 'quiz_list'
+});
+
+QuizHasTag.belongsTo(Quiz, {
+    foreignKey: 'quiz_id',
+    as: 'quiz'
+});
+QuizHasTag.belongsTo(Tag, {
+    foreignKey: 'tag_id',
+    as:'tag'
+});
+
+Quiz.hasMany(QuizHasTag, {
+    foreignKey: 'quiz_id',
+    as: 'quiz_id_list'
+});
+
+Tag.hasMany(QuizHasTag, {
+    foreignKey: 'tag_id',
+    as: 'tag_id_list'
 });
 
 
-
-// Question q = new Question(); // Lui vient de la bdd
-// q.level.name
-
-// [ Question
-//    - id
-//    - question : string
-//    - anectode : string
-//    - level : [Level
-//         - id
-//         - name
-//     ]
-// ]
-
-
-module.exports = { Level, Question, Answer }
+//~export modules
+module.exports = {
+    Level,
+    Answer,
+    Question,
+    Quiz,
+    Tag,
+    User,
+    QuizHasTag
+};

@@ -1,71 +1,72 @@
-const User = require('../models/user');
+//~import modules
+const errorController = require('./errorController');
+const {
+    User
+} = require('../models');
+const bcrypt = require('bcrypt');
 
+
+//~controller
 const userController = {
-    all: async (req, res) => {
-        const users = await User.findAll();
-
-        res.send(users);
-    },
-    get: async (req, res) => {
-        const id = Number(req.params.id);
-
-        if(!isNaN(id)) {
-            const user = await User.findByPk(id);
-
-            res.send(user);
-
-            return;
+    async renderSignUpPage(req, res) {
+        try {
+            res.render('pages/register', {
+                title: 'Inscription'
+            });
+        } catch (err) {
+            errorController._500(err, req, res);
         }
-
-
-        res.status(404);
-        res.send("Not found");
     },
-    create: async (req, res) => {
-         const body = req.body;
+    async renderSignInPage(req, res) {
+        try {
+            res.render('pages/connexion', {
+                title: 'Se connecter'
+            });
+        } catch (err) {
+            errorController._500(err, req, res);
+        }
+    },
+
+    async registerUser(req, res) {
+        const {
+            email,
+            password,
+            firstname,
+            lastname
+        } = req.body;
 
         try {
-            const user = await User.create(body);
+            //^chiffrage
+            const salt = await bcrypt.genSalt(10);
+            const hash = await bcrypt.hash(password, salt);
 
-            res.send(user);
-        } catch(err) {
-            res.send(err);
+            await User.create({
+                email,
+                password: hash,
+                firstname,
+                lastname
+            });
+
+            res.redirect('/connexion');
+
+        } catch (err) {
+            errorController._500(err, req, res);
         }
     },
-    update: async (req, res) => {
-        // on fait semblaint d'avoir un body
-        const body = req.body;
-        // Supprimer un niveau
-        const id = Number(req.params.id);
 
-        // Si id différent de NaN
-        if(!isNaN(id)) {
-            // https://sequelize.org/docs/v6/core-concepts/model-querying-basics/#simple-update-queries
-            const user = await User.update(body, { where: { id }});
-            res.send(user);
-            return;
-        } 
+    async renderProfilPage(req, res) {
+        try {
+            const password = req.body.password;
+            //
 
-        res.status(404);
-        res.send("Not found");
 
-    },
-    delete: async (req, res) => {
-        // Supprimer un niveau
-          const id = Number(req.params.id);
-
-          // Si id différent de NaN
-          if(!isNaN(id)) {
-              const user = await User.findByPk(id);
-              user.destroy();
-              res.send("He's gone");
-              return;
-          } 
-  
-          res.status(404);
-          res.send("Not found");
-    },
-    
+            res.render('pages/profil', {
+                title: 'Mon profil'
+            })
+        } catch (err) {
+            errorController._500(err, req, res);
+        }
+    }
 }
 
 module.exports = userController;

@@ -7,23 +7,23 @@ const {
 //~connect DB
 const sequelize = require('./getConnexion')();
 
-class Answer extends Model {};
+class QuizHasTag extends Model {};
 
-Answer.init({
+QuizHasTag.init({
     //~relations
     id: {
         type: Sequelize.INTEGER,
         unique: true,
         autoIncrement: true,
-        primaryKey: true,
-        allowNull: false
+        primaryKey: true
     },
-    description: {
-        type: Sequelize.TEXT,
-        allowNull: false
-    },
-    question_id: {
+    quiz_id: {
         type: Sequelize.INTEGER,
+        allowNull: false
+    },
+    tag_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false
     },
     created_at: {
         type: Sequelize.DATE,
@@ -34,10 +34,10 @@ Answer.init({
         type: Sequelize.DATE,
         allowNull: true
     }
+
 }, {
     sequelize,
-    modelName: 'Answer',
-    tableName: 'answer'
+    tableName: 'quiz_has_tag'
 });
 
-module.exports = Answer;
+module.exports = QuizHasTag;

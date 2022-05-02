@@ -5,7 +5,7 @@ const {
     literal
 } = require('sequelize');
 //~connect DB
-const sequelize = require('./getConnexion')();
+const sequelize = require('./getConnexion');
 
 class Tag extends Model {};
 

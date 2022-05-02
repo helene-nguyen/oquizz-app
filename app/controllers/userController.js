@@ -12,7 +12,7 @@ const userController = {
         try {
             const errorpwd = req.session.errorPwd;
 
-            errorpwd === 'Les mots de passe ne sont pas identiques, veuillez recommencer.' ? req.session.errorPwd = '' : errorpwd; 
+            errorpwd === 'Les mots de passe ne sont pas identiques, veuillez recommencer.' ? req.session.errorPwd = '' : errorpwd;
 
             res.render('pages/register', {
                 title: 'Inscription',
@@ -73,12 +73,38 @@ const userController = {
 
     async renderProfilPage(req, res) {
         try {
-            const signInPassword = req.body.password;
-            //bcrypt.compare(signInPassword)
 
-            res.render('pages/profil', {
-                title: 'Mon profil'
+            const {
+                email,
+                password
+            } = req.body;
+
+            const userRegistered = await User.findAll({
+                where: {
+                    email
+                }
+            });
+
+            bcrypt.compare(password, userRegistered[0].password, function (err, result) {
+                if (err) {
+                    errorController._500(err, req, res);
+                }
+
+                if (result) {
+                    console.log('Registered');
+                    res.render('pages/profil', {
+                        userRegistered : userRegistered[0]
+                    });
+                    return;
+                }
+                // response is OutgoingMessage object that server response http request
+                return res.json({
+                    success: false,
+                    message: 'passwords do not match'
+                })
+
             })
+
         } catch (err) {
             errorController._500(err, req, res);
         }

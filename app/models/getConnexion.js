@@ -1,7 +1,9 @@
-//!
-require('dotenv').config();
+//No need to call dotenv when destructure Sequelize
+// require('dotenv').config();
 //~import modules
-const Sequelize = require('sequelize');
+const {
+    Sequelize
+} = require('sequelize');
 
 //~connexion database
 function getConnexion() {
@@ -24,4 +26,4 @@ function getConnexion() {
     )
 }
 
-module.exports = getConnexion;
+module.exports = getConnexion();

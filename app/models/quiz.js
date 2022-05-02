@@ -5,7 +5,7 @@ const {
     literal
 } = require('sequelize');
 //~import DB
-const sequelize = require('./getConnexion')();
+const sequelize = require('./getConnexion');
 
 class Quiz extends Model {};
 

@@ -70,8 +70,6 @@ const quizController = {
                 }
             })
 
-            console.log(tags);
-
             let quizByLevel = await Quiz.findAll({
                 include: {
                     association: 'questions',

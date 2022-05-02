@@ -3,16 +3,22 @@
 
 <hr>
 
-<form class="register-form" action="/connexion" method="POST">
+<h3><%= errorpwd %> </h3>
 
+<form class="register-form" action="/connexion" method="POST">
+    <label for="lastname">Nom</label>
+    <input type="text" class="form-control col-8" placeholder="Nom" name="lastname" id="lastname">
+    <label for="firstname">Prénom</label>
+    <input type="text" class="form-control col-8" placeholder="Prénom" name="firstname" id="firstname">
     <label for="email">E-mail</label>
     <input type="email" class="form-control col-8" placeholder="E-mail" name="email" id="email" required>
     <label for="password">Mot de passe</label>
     <input type="password" class="form-control col-8" placeholder="Mot de passe" name="password" id="password" required>
-    <label for="firstname">Prénom</label>
-    <input type="text" class="form-control col-8" placeholder="Prénom" name="firstname" id="firstname">
-    <label for="lastname">Nom</label>
-    <input type="text" class="form-control col-8" placeholder="Nom" name="lastname" id="lastname">
+    <label for="passwordConfirm">Confirmez votre mot de passe</label>
+    <input type="password" class="form-control col-8" placeholder="Votre mot de passe" name="passwordConfirm"
+        id="passwordConfirm" required>
+
+
 
     <button type="submit" class="col-6 btn btn-lg btn-block btn-primary text-white my-3">S'inscrire</button>
 

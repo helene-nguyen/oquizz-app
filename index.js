@@ -5,13 +5,23 @@ require('dotenv').config();
 const express = require('express'),
     app = express(),
     router = require('./app/routers'),
-    errorController = require('./app/controllers/errorController');    
-    
+    errorController = require('./app/controllers/errorController');
+const session = require('express-session');
+
 //~url encoded
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({
+    extended: true
+}));
 //~statics
 app.use('/', express.static(__dirname + '/public'));
+//~session
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true,
+    cookie: {}
+}));
 //~motor
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/app/views');

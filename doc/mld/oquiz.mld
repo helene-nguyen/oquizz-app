@@ -1,0 +1,8 @@
+difficulty ( id, name )
+question ( id, description, anecdote, wiki, #difficulty(id), #quiz(id), #answer(id) )
+answer ( id , answer, #question(id) )
+user ( id, firstname, lastname, email, password )
+quiz ( id, title, description, #user(id) )
+theme ( id, name )
+subject( id, name )
+quiz AVOIR subject ( #quiz(id), #subject(id) )

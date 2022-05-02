@@ -1,0 +1,75 @@
+<html>
+<head>
+<meta charset='utf-8'>
+<style>
+  #mld .relation { font-variant: small-caps; font-weight: bold }
+  #mld .primary { text-decoration: underline }
+  #mld .foreign { font-style: oblique }
+  #mld .normal { }
+</style>
+</head>
+<body>
+<div id='mld'>
+<div>
+  <span class='relation'>theme</span> (
+    <span class='primary'>code_theme</span>,
+    <span class='normal'>name</span>
+  )
+</div>
+<div>
+  <span class='relation'>difficulty</span> (
+    <span class='primary'>code_difficulty</span>,
+    <span class='normal'>name</span>,
+    <span class='normal'></span>
+  )
+</div>
+<div>
+  <span class='relation'>quiz</span> (
+    <span class='primary'>code_quizz</span>,
+    <span class='normal'>title</span>,
+    <span class='normal'>description</span>,
+    <span class='foreign'>code_user</span>,
+    <span class='foreign'>code_theme</span>
+  )
+</div>
+<div>
+  <span class='relation'>question</span> (
+    <span class='primary'>code_question</span>,
+    <span class='normal'>info</span>,
+    <span class='foreign'>code_quizz</span>,
+    <span class='foreign'>code_answer</span>,
+    <span class='foreign'>code_answer.1</span>,
+    <span class='foreign'>code_difficulty</span>
+  )
+</div>
+<div>
+  <span class='relation'>user</span> (
+    <span class='primary'>code_user</span>,
+    <span class='normal'>firstname</span>,
+    <span class='normal'>lastname</span>,
+    <span class='normal'>email</span>,
+    <span class='normal'>password</span>
+  )
+</div>
+<div>
+  <span class='relation'>belongs to</span> (
+    <span class='foreign primary'>code_subject</span>,
+    <span class='foreign primary'>code_quizz</span>
+  )
+</div>
+<div>
+  <span class='relation'>subject</span> (
+    <span class='primary'>code_subject</span>,
+    <span class='normal'>name</span>
+  )
+</div>
+<div>
+  <span class='relation'>answer</span> (
+    <span class='primary'>code_answer</span>,
+    <span class='normal'>description</span>,
+    <span class='normal'></span>
+  )
+</div>
+</div>
+</body>
+</html>

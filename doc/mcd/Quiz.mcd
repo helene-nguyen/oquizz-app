@@ -1,0 +1,17 @@
+theme:code_theme, name
+belongs, 0N theme, 11 quiz
+:
+defined by, 0N difficulty, 11 question
+difficulty: code_difficulty, name,
+
+created, 0N user, 11 quiz
+quiz: code_quizz, title, description
+COMPOSE, 11 question, 0N quiz
+question: code_question, info
+contain, 0N answer, 11 question
+
+user: code_user, firstname, lastname, email, password
+belongs to, 0N subject, 0N quiz
+subject: code_subject, name
+validates, 01 answer, 11 question
+answer: code_answer, description,

@@ -1,0 +1,8 @@
+<%- include('../partials/header') %>
+
+<form action="<%= level ? '/levels/edit/' + level.id : '/levels/create' %>" method="POST" >
+    <input placeholder="level" name="name" value="<%= level ? level.name : '' %>">
+    <button type="submit"><%= level ? "EDIT" : "CREATE"%></button>
+</form>
+
+<%- include('../partials/footer') %>

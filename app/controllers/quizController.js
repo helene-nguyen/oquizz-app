@@ -56,39 +56,35 @@ const quizController = {
     async renderQuizGame(req, res) {
         try {
             const quizId = req.params.id;
-            const quiz = await Quiz.findByPk(quizId);
-            
-            const tags = await Tag.findAll({
-                include: {
-                    association: 'tag_id_list',
-                    include: [{
-                        association: 'quiz'
-                    }],
-                    where: {
-                        quiz_id: quizId
-                    }
-                }
-            })
 
-            let quizByLevel = await Quiz.findAll({
-                include: {
-                    association: 'questions',
-                    include: ['level', 'answers'],
-                    where: {
-                        quiz_id: quizId
+            const quiz = await Quiz.findByPk(quizId, {
+                include: [{
+                        association: 'questions', //alias in index.js
+                        include: ['level', {
+                            model: Answer,
+                            as: 'answers',
+                            attributes: ['id', 'description']
+                        }]
                     },
-                }
+                    {
+                        model: Tag,
+                        as: 'tags',
+                        attributes: ['id', 'name']
+                    },
+                    {
+                        model: User,
+                        as: 'author',
+                        attributes: ['firstname', 'lastname']
+                    }
+                ]
             });
 
-            quizByLevel.forEach(element => {
-                quizByLevel = element.questions;
-            });
+            // res.json(quiz);
 
             res.render('pages/quiz', {
-                tags,
-                quiz,
-                quizByLevel
+                quiz
             });
+
         } catch (err) {
             errorController._500(err, req, res);
         }

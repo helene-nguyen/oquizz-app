@@ -8,17 +8,12 @@
     <div class="d-flex flex-row justify-content-center align-items-center">
         <p class="px-3">Catégorie(s) :</p>
         <% tags.forEach(tag => { %>
-        <p class="px-3"> <%= tag.name %> </p>
+        <p class="px-3"> <a href="/tags/<%= tag.id %>"><%= tag.name %></a> </p>
         <% }) %>
     </div>
 
-
     <hr>
-
     <p class="lead"><%= quiz.description %></p>
-    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-        invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo
-        duo</p>
 </div>
 
 <hr>
@@ -35,10 +30,11 @@
             <h3 class="card-header">Niveau <%= element.level_id %></h3>
 
             <div class="card-body d-flex flex-column justify-content-between">
-                <h4 class="h4 card-title pricing-card-title"><%= element.question %> </h4>
+                <h4 class="h4 card-title pricing-card-title my-5"><%= element.question %> </h4>
 
                 <% element.answers.forEach(element => { %>
-                <p><%= element.description %> </p>
+
+                <button type="button" class="btn btn-outline-dark my-2 d-grid gap-2 col-6 mx-auto"><%= element.description %></button>
                 <% }) %>
 
             </div>

@@ -57,6 +57,7 @@ const quizController = {
         try {
             const quizId = req.params.id;
             const quiz = await Quiz.findByPk(quizId);
+            
             const tags = await Tag.findAll({
                 include: {
                     association: 'tag_id_list',

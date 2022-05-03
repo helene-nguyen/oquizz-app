@@ -12,6 +12,7 @@ router.get('/', renderHomePage);
 router.get('/signup', renderSignUpPage);
 router.get('/connexion', renderSignInPage);
 router.post('/connexion', registerUser);
+router.get('/profil', renderProfilPage);
 router.post('/profil', renderProfilPage);
 //tag
 router.get('/tags', tagList);

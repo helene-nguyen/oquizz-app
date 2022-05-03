@@ -53,7 +53,7 @@ const userController = {
             //^chiffrage
             const salt = await bcrypt.genSalt(10);
             const hash = await bcrypt.hash(password, salt);
-            const hashPwdConfirm = await bcrypt.hash(passwordConfirm, salt)
+            const hashPwdConfirm = await bcrypt.hash(passwordConfirm, salt);
 
             if (hash === hashPwdConfirm) {
                 await User.create({
@@ -98,6 +98,7 @@ const userController = {
 
                 if (result) {
                     req.session.wrongPwd = '';
+
                     res.render('pages/profil', {
                         userRegistered: userRegistered[0]
                     });
@@ -108,7 +109,7 @@ const userController = {
 
                 return res.redirect('/connexion');
             })
-            
+
         } catch (err) {
             errorController._500(err, req, res);
         }

@@ -41,7 +41,6 @@ User.hasMany(Quiz, {
     as: 'quiz_list'
 });
 
-
 //^-----------Question - Answer
 Question.hasMany(Answer, {
     foreignKey: 'question_id',

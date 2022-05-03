@@ -112,7 +112,9 @@
 
 .register-form input {
   margin-bottom: 1em;
-
 }
 
-.card-deck {}
+.info-email {
+  color: #383d41;
+  font-size: 0.75em;
+}

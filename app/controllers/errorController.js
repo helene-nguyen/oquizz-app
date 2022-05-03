@@ -1,4 +1,7 @@
 const errorController = {
+  _401: (req, res) => {
+    res.status(401).send("Authentification error");
+  },
   _403: (req, res) => {
     res.status(403).send("Access denied");
   },

@@ -22,7 +22,7 @@ const userController = {
 
             errorEmail === 'E-mail non valide !' ? req.session.errorEmail = '' : errorEmail;
 
-            errorUserAlreadyExists === `L'utilisateur existe déjà!` ? req.session.errorUserAlreadyExists = '' : errorUserAlreadyExists;
+            errorUserAlreadyExists === `Utilisateur avec cet e-mail existe déjà!` ? req.session.errorUserAlreadyExists = '' : errorUserAlreadyExists;
 
             //render
             res.render('pages/register', {
@@ -41,18 +41,22 @@ const userController = {
         try {
             //variables
             const wrongPwd = req.session.wrongPwd;
-            const errorEmail = req.session.errorEmail;
+            const errorRegister = req.session.errorRegister;
+            const userCreated = req.session.userCreated;
 
             //session
             wrongPwd === 'Vous avez rentré le mauvais mot de passe, veuillez recommencer.' ? req.session.wrongPwd = '' : wrongPwd;
 
-            errorEmail === 'E-mail non valide !' ? req.session.errorEmail = '' : errorEmail;
+            errorRegister === 'E-mail ou mot de passe non valide !' ? req.session.errorRegister = '' : errorRegister;
+
+            userCreated === 'Votre compte a bien été créé' ? req.session.userCreated = '' : userCreated;
 
             //render
             res.render('pages/connexion', {
                 title: 'Se connecter',
                 wrongPwd,
-                errorEmail
+                errorRegister,
+                userCreated
             });
         } catch (err) {
             errorController._500(err, req, res);
@@ -74,22 +78,19 @@ const userController = {
             //^check email
             if (!emailValidator.validate(email)) {
                 req.session.errorEmail = 'E-mail non valide !';
-                res.redirect('/signup');
-                return;
+                return res.redirect('/signup');
             }
 
-            //TODO  check if it's all ok 
             //^check user DB
-            const exists = User.findOne({
+            const exists = await User.findOne({
                 where: {
-                    email: email
+                    email
                 },
             });
 
             if (exists) {
-                req.session.errorUserAlreadyExists = `L'utilisateur existe déjà!`
-                res.redirect('/signup');
-                return;
+                req.session.errorUserAlreadyExists = `Utilisateur avec cet e-mail existe déjà!`
+                return res.redirect('/signup');
             };
 
             //^check password
@@ -106,14 +107,13 @@ const userController = {
                     lastname
                 });
                 req.session.errorPwd = '';
-
-                res.redirect('/connexion');
-                return;
+                req.session.userCreated = 'Votre compte a bien été créé';
+                return res.redirect('/connexion');
             }
 
-            req.session.errorPwd = 'Les mots de passe ne sont pas identiques, veuillez recommencer.'
 
-            //send bakc to signup page
+            req.session.errorPwd = 'Les mots de passe ne sont pas identiques, veuillez recommencer.'
+            //send back to signup page
             res.redirect('/signup');
 
         } catch (err) {
@@ -123,9 +123,9 @@ const userController = {
 
     async renderProfilPage(req, res) {
         try {
-            let userRegistered = req.session.userRegistered;
+            let userRegistered = req.session.user;
 
-            userRegistered !== undefined ? userRegistered = req.session.userRegistered : userRegistered = '';
+            userRegistered !== undefined ? (userRegistered = req.session.user) : userRegistered = '';
 
             res.render('pages/profil', {
                 userRegistered
@@ -147,40 +147,54 @@ const userController = {
             //check infos
             //^check email
             if (!emailValidator.validate(email)) {
-                req.session.errorEmail = 'E-mail non valide !';
-                res.redirect('/connexion');
-                return;
+                req.session.errorRegister = 'E-mail ou mot de passe non valide !';
+                return res.redirect('/connexion');
             };
 
             //^check user password
-            const userRegistered = await User.findAll({
+            const userRegistered = await User.findOne({
                 where: {
                     email
-                }
+                },
             });
 
-            bcrypt.compare(password, userRegistered[0].password, function (err, result) {
+            if (userRegistered === null) {
+                req.session.errorRegister = 'E-mail ou mot de passe non valide !';
+                return res.redirect('/connexion');
+            };
+
+            bcrypt.compare(password, userRegistered.password, function (err, result) {
                 if (err) {
-                    errorController._500(err, req, res);
+                    errorController._401(err, req, res);
                 }
 
                 if (result) {
                     req.session.wrongPwd = '';
-                    req.session.userRegistered = userRegistered[0];
 
-                    res.redirect('/profil')
+                    req.session.user = userRegistered;
+                    //todo             
+                    // delete req.session.user.password;
+
+                    req.session.user.role === "admin" ? res.redirect('/admin') : res.redirect('/profil');
 
                     return;
                 }
                 // response is OutgoingMessage object that server response http request
-                req.session.wrongPwd = 'Vous avez rentré le mauvais mot de passe, veuillez recommencer.';
+                req.session.errorRegister = 'E-mail ou mot de passe non valide !';
 
                 return res.redirect('/connexion');
-            })
+            });
+
 
         } catch (err) {
             errorController._500(err, req, res);
         }
+    },
+
+    logoutUser(req, res) {
+        //on annule la session
+        req.session.user = false;
+        res.redirect('/connexion');
     }
 }
 

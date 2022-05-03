@@ -50,6 +50,8 @@ const quizController = {
                 }
             });
 
+            // res.json(quizByTag);
+
             res.render('pages/tag', {
                 title: tag.name,
                 quizByTag

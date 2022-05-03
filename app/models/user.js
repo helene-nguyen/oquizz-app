@@ -45,6 +45,11 @@ User.init({
         type: Sequelize.TEXT,
         allowNull: true
     },
+    role: {
+        type: Sequelize.TEXT,
+        allowNull: false,
+        defaultValue: 'user'
+    },
     created_at: {
         type: Sequelize.DATE,
         allowNull: false,

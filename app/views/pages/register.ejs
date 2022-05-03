@@ -3,9 +3,18 @@
 
 <hr>
 
-<h3><%= errorPwd %> </h3>
-<h3><%= errorEmail %></h3>
-<h3><%= errorUserAlreadyExists %></h3>
+<% if (errorPwd) { %>
+<p class="alert alert-danger" role="alert"><%=  errorPwd %></p>
+<% } %>
+
+<% if (errorEmail) { %>
+<p class="alert alert-danger" role="alert"><%=  errorEmail %></p>
+<% } %>
+
+<% if (errorUserAlreadyExists) { %>
+<p class="alert alert-danger" role="alert"><%=  errorUserAlreadyExists %></p>
+<% } %>
+
 
 <form class="register-form" action="/connexion" method="POST">
     <label for="lastname">Nom</label>

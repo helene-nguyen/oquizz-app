@@ -7,6 +7,7 @@ const express = require('express'),
     router = require('./app/routers'),
     errorController = require('./app/controllers/errorController');
 const session = require('express-session');
+const userMiddleware = require('./app/middlewares/userMiddleware');
 
 //~url encoded
 app.use(express.json());
@@ -15,6 +16,7 @@ app.use(express.urlencoded({
 }));
 //~statics
 app.use('/', express.static(__dirname + '/public'));
+
 //~session
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -22,6 +24,9 @@ app.use(session({
     saveUninitialized: true,
     cookie: {}
 }));
+//&great mw to keep the user connected !
+app.use(userMiddleware);
+
 //~motor
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/app/views');

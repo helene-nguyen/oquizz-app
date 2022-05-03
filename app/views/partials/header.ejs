@@ -24,12 +24,19 @@
         <nav class="my-2 my-md-0 mr-md-3">
             <a class="p-2 text-white" href="/">Accueil</a>
             <a class="p-2 text-white" href="/tags">Sujets</a>
-            <a class="p-2 text-white" href="/signup">S'inscrire</a>
 
 
-            <a class="p-2 text-white" href="/connexion">Se connecter</a>
-
+            <% if (locals.user) { %>
             <a class="p-2 text-white" href="/profil">Mon profil</a>
+            <a class="p-2 text-white" href="/logout">Se déconnecter</a>
+            <% } else { %>
+            <a class="p-2 text-white" href="/signup">S'inscrire</a>
+            <a class="p-2 text-white" href="/connexion">Se connecter</a>
+            <% } %>
+            <% if (locals.user.role === 'admin') { %>
+            <button type="button" class="btn btn-outline-dark"><a class="p-2 text-white" href="/admin">Admin</a></button>
+            <% } %>
+
 
         </nav>
         <form class="d-flex" action='/search' method="get">

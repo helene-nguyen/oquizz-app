@@ -10,9 +10,6 @@ const mainController = {
 
     async renderHomePage(req, res) {
         try {
-            //TODO: REMOVE after test 
-            console.log(req.query.search);
-
             const quizList = await Quiz.findAll({
                 include: [{
                     association: 'author',

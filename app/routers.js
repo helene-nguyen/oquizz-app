@@ -4,6 +4,7 @@ const router = Router();
 const { renderHomePage } = require('./controllers/mainController');
 const { renderSignUpPage, renderSignInPage, registerUser, renderProfilPage } = require('./controllers/userController');
 const { tagList, renderQuizListByTag, renderQuizGame } = require('./controllers/quizController.js');
+const { renderSearchPage } = require('./controllers/searchController');
 
 //~routers
 router.get('/', renderHomePage);
@@ -17,5 +18,8 @@ router.get('/tags', tagList);
 router.get('/tags/:id', renderQuizListByTag);
 //game
 router.get('/quiz/:id', renderQuizGame);
+//search
+router.get('/search', renderSearchPage);
+router.post('/search', renderSearchPage);
 
 module.exports = router;

@@ -9,7 +9,11 @@ const {
 //~import DB
 const sequelize = require('./getConnexion');
 
-class User extends Model {};
+class User extends Model {
+    get fullName() { //en mettant get, on crée un getter pour l'utiliser directement dans notre code ejs
+        return `${this.firstname} ${this.lastname}` 
+    }
+};
 
 User.init({
     //~relations

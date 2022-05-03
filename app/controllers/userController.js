@@ -8,25 +8,32 @@ const bcrypt = require('bcrypt');
 
 //~controller
 const userController = {
+
     async renderSignUpPage(req, res) {
         try {
-            const errorpwd = req.session.errorPwd;
+            const errorPwd = req.session.errorPwd;
 
-            errorpwd === 'Les mots de passe ne sont pas identiques, veuillez recommencer.' ? req.session.errorPwd = '' : errorpwd;
+            errorPwd === 'Les mots de passe ne sont pas identiques, veuillez recommencer.' ? req.session.errorPwd = '' : errorPwd;
 
             res.render('pages/register', {
                 title: 'Inscription',
-                errorpwd: errorpwd === '' ? '' : errorpwd
+                errorPwd
             });
 
         } catch (err) {
             errorController._500(err, req, res);
         }
     },
+
     async renderSignInPage(req, res) {
         try {
+            const wrongPwd = req.session.wrongPwd;
+
+            wrongPwd === 'Vous avez rentré le mauvais mot de passe, veuillez recommencer.' ? req.session.wrongPwd = '' : wrongPwd;
+
             res.render('pages/connexion', {
-                title: 'Se connecter'
+                title: 'Se connecter',
+                wrongPwd
             });
         } catch (err) {
             errorController._500(err, req, res);
@@ -73,7 +80,6 @@ const userController = {
 
     async renderProfilPage(req, res) {
         try {
-
             const {
                 email,
                 password
@@ -91,20 +97,18 @@ const userController = {
                 }
 
                 if (result) {
-                    console.log('Registered');
+                    req.session.wrongPwd = '';
                     res.render('pages/profil', {
-                        userRegistered : userRegistered[0]
+                        userRegistered: userRegistered[0]
                     });
                     return;
                 }
                 // response is OutgoingMessage object that server response http request
-                return res.json({
-                    success: false,
-                    message: 'passwords do not match'
-                })
+                req.session.wrongPwd = 'Vous avez rentré le mauvais mot de passe, veuillez recommencer.';
 
+                return res.redirect('/connexion');
             })
-
+            
         } catch (err) {
             errorController._500(err, req, res);
         }

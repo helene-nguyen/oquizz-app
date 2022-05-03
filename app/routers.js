@@ -2,7 +2,7 @@
 const { Router } = require('express');
 const router = Router();
 const { renderHomePage } = require('./controllers/mainController');
-const { renderSignUpPage, renderSignInPage, registerUser, renderProfilPage } = require('./controllers/userController');
+const { renderSignUpPage, renderSignInPage, registerUser, renderProfilPage , loginUser } = require('./controllers/userController');
 const { tagList, renderQuizListByTag, renderQuizGame } = require('./controllers/quizController.js');
 const { renderSearchPage } = require('./controllers/searchController');
 
@@ -10,10 +10,10 @@ const { renderSearchPage } = require('./controllers/searchController');
 router.get('/', renderHomePage);
 //user
 router.get('/signup', renderSignUpPage);
-router.get('/connexion', renderSignInPage);
+router.get('/connexion', renderSignInPage, loginUser);
 router.post('/connexion', registerUser);
 router.get('/profil', renderProfilPage);
-router.post('/profil', renderProfilPage);
+router.post('/profil', loginUser);
 //tag
 router.get('/tags', tagList);
 router.get('/tags/:id', renderQuizListByTag);

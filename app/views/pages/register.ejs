@@ -4,6 +4,8 @@
 <hr>
 
 <h3><%= errorPwd %> </h3>
+<h3><%= errorEmail %></h3>
+<h3><%= errorUserAlreadyExists %></h3>
 
 <form class="register-form" action="/connexion" method="POST">
     <label for="lastname">Nom</label>
@@ -11,7 +13,7 @@
     <label for="firstname">Prénom</label>
     <input type="text" class="form-control col-8" placeholder="Prénom" name="firstname" id="firstname">
     <label for="email">E-mail</label>
-    <input type="email" class="form-control col-8" placeholder="E-mail" name="email" id="email" required>
+    <input type="text" class="form-control col-8" placeholder="E-mail" name="email" id="email" required>
     <p class="info-email">Nous ne partageons jamais votre e-mail</p>
     <label for="password">Mot de passe</label>
     <input type="password" class="form-control col-8" placeholder="Mot de passe" name="password" id="password" required>

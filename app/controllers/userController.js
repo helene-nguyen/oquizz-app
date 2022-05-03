@@ -4,6 +4,7 @@ const {
     User
 } = require('../models');
 const bcrypt = require('bcrypt');
+const emailValidator = require('email-validator');
 
 
 //~controller
@@ -11,13 +12,24 @@ const userController = {
 
     async renderSignUpPage(req, res) {
         try {
+            //variables
             const errorPwd = req.session.errorPwd;
+            const errorEmail = req.session.errorEmail;
+            const errorUserAlreadyExists = req.session.errorUserAlreadyExists;
 
+            //session
             errorPwd === 'Les mots de passe ne sont pas identiques, veuillez recommencer.' ? req.session.errorPwd = '' : errorPwd;
 
+            errorEmail === 'E-mail non valide !' ? req.session.errorEmail = '' : errorEmail;
+
+            errorUserAlreadyExists === `L'utilisateur existe déjà!` ? req.session.errorUserAlreadyExists = '' : errorUserAlreadyExists;
+
+            //render
             res.render('pages/register', {
                 title: 'Inscription',
-                errorPwd
+                errorPwd,
+                errorEmail,
+                errorUserAlreadyExists
             });
 
         } catch (err) {
@@ -27,13 +39,20 @@ const userController = {
 
     async renderSignInPage(req, res) {
         try {
+            //variables
             const wrongPwd = req.session.wrongPwd;
+            const errorEmail = req.session.errorEmail;
 
+            //session
             wrongPwd === 'Vous avez rentré le mauvais mot de passe, veuillez recommencer.' ? req.session.wrongPwd = '' : wrongPwd;
 
+            errorEmail === 'E-mail non valide !' ? req.session.errorEmail = '' : errorEmail;
+
+            //render
             res.render('pages/connexion', {
                 title: 'Se connecter',
-                wrongPwd
+                wrongPwd,
+                errorEmail
             });
         } catch (err) {
             errorController._500(err, req, res);
@@ -41,16 +60,39 @@ const userController = {
     },
 
     async registerUser(req, res) {
-        const {
-            email,
-            password,
-            passwordConfirm,
-            firstname,
-            lastname
-        } = req.body;
-
         try {
-            //^chiffrage
+            //variables
+            const {
+                email,
+                password,
+                passwordConfirm,
+                firstname,
+                lastname
+            } = req.body;
+
+            //check infos
+            //^check email
+            if (!emailValidator.validate(email)) {
+                req.session.errorEmail = 'E-mail non valide !';
+                res.redirect('/signup');
+                return;
+            }
+
+            //TODO  check if it's all ok 
+            //^check user DB
+            const exists = User.findOne({
+                where: {
+                    email: email
+                },
+            });
+
+            if (exists) {
+                req.session.errorUserAlreadyExists = `L'utilisateur existe déjà!`
+                res.redirect('/signup');
+                return;
+            };
+
+            //^check password
             const salt = await bcrypt.genSalt(10);
             const hash = await bcrypt.hash(password, salt);
             const hashPwdConfirm = await bcrypt.hash(passwordConfirm, salt);
@@ -71,6 +113,7 @@ const userController = {
 
             req.session.errorPwd = 'Les mots de passe ne sont pas identiques, veuillez recommencer.'
 
+            //send bakc to signup page
             res.redirect('/signup');
 
         } catch (err) {
@@ -80,11 +123,36 @@ const userController = {
 
     async renderProfilPage(req, res) {
         try {
+            let userRegistered = req.session.userRegistered;
+
+            userRegistered !== undefined ? userRegistered = req.session.userRegistered : userRegistered = '';
+
+            res.render('pages/profil', {
+                userRegistered
+            });
+
+        } catch (err) {
+            errorController._500(err, req, res);
+        }
+    },
+
+    async loginUser(req, res) {
+        try {
+            //variables
             const {
                 email,
                 password
             } = req.body;
 
+            //check infos
+            //^check email
+            if (!emailValidator.validate(email)) {
+                req.session.errorEmail = 'E-mail non valide !';
+                res.redirect('/connexion');
+                return;
+            };
+
+            //^check user password
             const userRegistered = await User.findAll({
                 where: {
                     email
@@ -98,10 +166,10 @@ const userController = {
 
                 if (result) {
                     req.session.wrongPwd = '';
+                    req.session.userRegistered = userRegistered[0];
 
-                    res.render('pages/profil', {
-                        userRegistered: userRegistered[0]
-                    });
+                    res.redirect('/profil')
+
                     return;
                 }
                 // response is OutgoingMessage object that server response http request

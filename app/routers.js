@@ -22,6 +22,7 @@ const {
     renderQuizListByTag,
     renderQuizGame,
     tagList,
+    quizPlay
 } = require('./controllers/quizController.js');
 const {
     renderSearchPage
@@ -50,6 +51,7 @@ router.get('/tags', tagList);
 router.get('/tags/:id', renderQuizListByTag);
 //*quiz
 router.get('/quiz/:id', renderQuizGame);
+router.post('/quiz/:id', quizPlay);
 //*search
 router.get('/search', renderSearchPage);
 router.post('/search', renderSearchPage);

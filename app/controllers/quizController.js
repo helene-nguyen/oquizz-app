@@ -31,7 +31,7 @@ const quizController = {
         try {
             const tagId = parseInt(req.params.id, 10)
             // console.log(typeof tagId);
-            
+
             /* if (isNaN(id)) {
                 throw new Error('Problème avec tagId'); 
             } */
@@ -96,6 +96,45 @@ const quizController = {
         } catch (err) {
             errorController._500(err, req, res);
         }
+    },
+
+    async quizPlay(req, res) {
+
+        const resultQuiz = [];
+        let goodAnswersCount = 0;
+        let wrongAnswersCount = 0;
+
+        for (const [key, value] of Object.entries(req.body)) {
+
+            const question = await Question.findByPk(key, {
+                include: ['good_answer', 'answers']
+            });
+
+            const wrongAnswers = await Answer.findByPk(value, {
+                where: {
+                    id: value
+                }
+            });
+
+            console.log(wrongAnswers);
+
+            if (Number(value) === question.good_answer.id) {
+                goodAnswersCount++;
+                resultQuiz.push(`${question.question} ${question.good_answer.description} est la bonne réponse`)
+            }
+
+            if (Number(value) !== question.good_answer.id) {
+                wrongAnswersCount++
+                resultQuiz.push(`${question.question} Tu as choisi ${wrongAnswers.description} et c'est faux !`);
+            }
+        }
+
+        res.json({
+            result: `Tu as ${goodAnswersCount} bonnes réponses et ${wrongAnswersCount} mauvaises réponses sur ${resultQuiz.length} questions`,
+            resultQuiz
+        });
+
+
     }
 };
 

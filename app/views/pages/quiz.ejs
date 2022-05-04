@@ -20,27 +20,44 @@
 <hr>
 
 <div class="card-deck d-flex flex-column mb-3 text-center">
-    <h3> Nombre de questions :  <%= quiz.questions.length %></h3>
+    <h3> Nombre de questions : <%= quiz.questions.length %></h3>
     <hr>
     <div class="col-12 d-flex flex-column">
-        <% quiz.questions.forEach(element => { %>
 
-        <div class="card mb-4 shadow-sm d-flex flex-column">
+        <form method="POST">
 
-            <h3 class="card-header">Niveau <%= element.level.name %></h3>
+            <% quiz.questions.forEach(question => { %>
 
-            <div class="card-body d-flex flex-column justify-content-between">
-                <h4 class="h4 card-title pricing-card-title my-5"><%= element.question %> </h4>
+            <div class="card mb-4 shadow-sm d-flex flex-column">
 
-                <% element.answers.sort(()=> Math.random()-0.5).forEach(answer => { %>
+                <h3 class="card-header">Niveau <%= question.level.name %></h3>
 
-                <button type="button" class="btn btn-outline-dark my-2 d-grid gap-2 col-6 mx-auto"><%= answer.description %></button>
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h4 class="h4 card-title pricing-card-title my-5"><%= question.question %> </h4>
 
-                <% }) %>
+                    <article class="container">
+                        <ul>
+                            <% question.answers.sort(()=> Math.random()-0.5).forEach(answer => { %>
 
+                            <li>
+                                <input type="radio" id="<%= answer.id %>" name="<%= question.id %>" value="<%= answer.id %>">
+                                <label for="<%= answer.id %>"><%= answer.description %></label>
+                            </li>
+
+                            <% }) %>
+
+                        </ul>
+                    </article>
+
+                </div>
             </div>
-        </div>
-        <% }) %>
+
+            <% }) %>
+
+            <button type="submit" class="btn btn-outline-dark my-2 d-grid gap-2 col-6 mx-auto">Valider</button>
+
+        </form>
+
     </div>
 </div>
 

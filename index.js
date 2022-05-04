@@ -9,7 +9,7 @@ const express = require('express'),
 const session = require('express-session');
 const {
     userMiddleware
-} = require('./app/middlewares/user');
+} = require('./app/middlewares/');
 
 //~url encoded
 app.use(express.json());

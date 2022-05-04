@@ -28,11 +28,10 @@ const {
 } = require('./controllers/searchController');
 //middleware
 const {
+    auth,
     adminMiddleware
-} = require('./middlewares/admin');
-const {
-    auth
-} = require('./middlewares/auth');
+} = require('./middlewares/');
+
 
 //~---------------------routers
 router.get('/', renderHomePage);

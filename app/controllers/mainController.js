@@ -3,7 +3,8 @@ const errorController = require("./errorController");
 const {
     Quiz,
     User
-} = require('../models/index.js')
+} = require('../models/index.js');
+const { Sequelize, Op } = require('sequelize');
 
 //~controller
 const mainController = {

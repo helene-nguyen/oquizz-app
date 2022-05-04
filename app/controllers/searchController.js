@@ -14,6 +14,8 @@ const searchController = {
             console.log(req.query.search);
             const search = req.query.search;
 
+            /* const quizList =  */
+
             res.render('pages/search', {
                 title : "Votre recherche", 
                 search

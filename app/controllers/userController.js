@@ -111,9 +111,8 @@ const userController = {
                 return res.redirect('/connexion');
             }
 
-
             req.session.errorPwd = 'Les mots de passe ne sont pas identiques, veuillez recommencer.'
-            //send back to signup page
+
             res.redirect('/signup');
 
         } catch (err) {
@@ -124,12 +123,11 @@ const userController = {
     async renderProfilPage(req, res) {
         try {
             let userRegistered = req.session.user;
-
-            userRegistered !== undefined ? (userRegistered = req.session.user) : userRegistered = '';
-
-            res.render('pages/profil', {
-                userRegistered
-            });
+            //ternary operator
+            req.session.user && req.session.user.role === 'user' ?
+                res.render('pages/profil', {
+                    userRegistered
+                }) : res.redirect('/connexion')
 
         } catch (err) {
             errorController._500(err, req, res);
@@ -192,7 +190,7 @@ const userController = {
     },
 
     logoutUser(req, res) {
-        //on annule la session
+        //cancel the session
         req.session.user = false;
         res.redirect('/connexion');
     }

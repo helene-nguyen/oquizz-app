@@ -5,8 +5,6 @@ const {
 } = require('../models');
 const bcrypt = require('bcrypt');
 const emailValidator = require('email-validator');
-const { user } = require('pg/lib/defaults');
-
 
 //~controller
 const userController = {
@@ -59,6 +57,7 @@ const userController = {
                 errorRegister,
                 userCreated
             });
+            
         } catch (err) {
             errorController._500(err, req, res);
         }
@@ -67,13 +66,11 @@ const userController = {
     async registerUser(req, res) {
         try {
             //variables
-            const {
-                email,
-                password,
-                passwordConfirm,
-                firstname,
-                lastname
-            } = req.body;
+             const {
+                 email,
+                 password,
+                 passwordConfirm,
+             } = req.body;
 
             //check infos
             //^check email
@@ -99,13 +96,12 @@ const userController = {
             const hash = await bcrypt.hash(password, salt);
             const hashPwdConfirm = await bcrypt.hash(passwordConfirm, salt);
 
+            //review spread ope
             if (hash === hashPwdConfirm) {
                 await User.create({
-                    email,
+                    ...req.body,
                     password: hash,
                     passwordConfirm: hashPwdConfirm,
-                    firstname,
-                    lastname
                 });
                 req.session.errorPwd = '';
                 req.session.userCreated = 'Votre compte a bien été créé';
@@ -169,13 +165,10 @@ const userController = {
 
                 if (result) {
                     req.session.wrongPwd = '';
-
                     req.session.user = userRegistered;
 
-                    //todo    OK dataVALUES        
-                    delete userRegistered.dataValues.password
-                    console.log(req.session.user);
-                    
+                    delete userRegistered.dataValues.password;
+
                     req.session.user.role === "admin" ? res.redirect('/admin') : res.redirect('/profil');
 
                     return;
@@ -186,7 +179,6 @@ const userController = {
                 return res.redirect('/connexion');
             });
 
-
         } catch (err) {
             errorController._500(err, req, res);
         }
@@ -194,7 +186,8 @@ const userController = {
 
     logoutUser(req, res) {
         //cancel the session
-        req.session.user = false;
+        // req.session.user = false;
+        req.session.destroy();
         res.redirect('/connexion');
     }
 }

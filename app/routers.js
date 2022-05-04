@@ -3,6 +3,7 @@ const {
     Router
 } = require('express');
 const router = Router();
+
 const {
     renderHomePage
 } = require('./controllers/mainController');
@@ -25,8 +26,13 @@ const {
 const {
     renderSearchPage
 } = require('./controllers/searchController');
-const adminMiddleware = require('./middlewares/admin');
-const authMiddleware = require('./middlewares/auth');
+//middleware
+const {
+    adminMiddleware
+} = require('./middlewares/admin');
+const {
+    auth
+} = require('./middlewares/auth');
 
 //~---------------------routers
 router.get('/', renderHomePage);
@@ -34,7 +40,7 @@ router.get('/', renderHomePage);
 router.get('/signup', renderSignUpPage);
 router.get('/connexion', renderSignInPage, loginUser);
 router.post('/connexion', registerUser);
-router.get('/profil', authMiddleware, renderProfilPage);
+router.get('/profil', auth, renderProfilPage);
 router.post('/profil', loginUser);
 router.get('/logout', logoutUser);
 //*admin
@@ -43,7 +49,7 @@ router.post('/admin', renderAdminPage);
 //*tag
 router.get('/tags', tagList);
 router.get('/tags/:id', renderQuizListByTag);
-//*game
+//*quiz
 router.get('/quiz/:id', renderQuizGame);
 //*search
 router.get('/search', renderSearchPage);

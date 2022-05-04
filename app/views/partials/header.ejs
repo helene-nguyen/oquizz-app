@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -26,14 +27,15 @@
 
 
             <% if (locals.user) { %>
-            <a class="p-2 text-white" href="/profil">Mon profil</a>
             <a class="p-2 text-white" href="/logout">Se déconnecter</a>
+            <button type="button" class="btn btn-outline-dark"><a class="p-2 text-white" href="/profil">Mon profil</a></button>
             <% } else { %>
             <a class="p-2 text-white" href="/signup">S'inscrire</a>
             <a class="p-2 text-white" href="/connexion">Se connecter</a>
             <% } %>
             <% if (locals.user.role === 'admin') { %>
-            <button type="button" class="btn btn-outline-dark"><a class="p-2 text-white" href="/admin">Admin</a></button>
+            <button type="button" class="btn btn-outline-dark"><a class="p-2 text-white"
+                    href="/admin">Admin</a></button>
             <% } %>
 
 

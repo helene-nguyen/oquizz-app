@@ -5,6 +5,7 @@ const {
 } = require('../models');
 const bcrypt = require('bcrypt');
 const emailValidator = require('email-validator');
+const { user } = require('pg/lib/defaults');
 
 
 //~controller
@@ -124,10 +125,9 @@ const userController = {
         try {
             let userRegistered = req.session.user;
             //ternary operator
-            req.session.user && req.session.user.role === 'user' ?
-                res.render('pages/profil', {
-                    userRegistered
-                }) : res.redirect('/connexion')
+            req.session.user && req.session.user.role === 'user' ? res.render('pages/profil', {
+                userRegistered
+            }) : res.redirect('/connexion');
 
         } catch (err) {
             errorController._500(err, req, res);
@@ -162,6 +162,7 @@ const userController = {
             };
 
             bcrypt.compare(password, userRegistered.password, function (err, result) {
+
                 if (err) {
                     errorController._401(err, req, res);
                 }
@@ -170,9 +171,11 @@ const userController = {
                     req.session.wrongPwd = '';
 
                     req.session.user = userRegistered;
-                    //todo             
-                    // delete req.session.user.password;
 
+                    //todo    OK dataVALUES        
+                    delete userRegistered.dataValues.password
+                    console.log(req.session.user);
+                    
                     req.session.user.role === "admin" ? res.redirect('/admin') : res.redirect('/profil');
 
                     return;

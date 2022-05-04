@@ -1,11 +1,10 @@
+//!Not used, exemple from teacher
 const Question = require("../models/question");
 
 const questionController = {
     all: async (req, res) => {
         // Récupérer tous les niveaux
         const questions = await Question.findAll({});
-            
-        // res.send(questions);
 
         res.render('questions/all', { questions })
 

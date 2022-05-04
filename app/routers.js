@@ -25,6 +25,8 @@ const {
 const {
     renderSearchPage
 } = require('./controllers/searchController');
+const adminMiddleware = require('./middlewares/admin');
+const authMiddleware = require('./middlewares/auth');
 
 //~---------------------routers
 router.get('/', renderHomePage);
@@ -32,11 +34,11 @@ router.get('/', renderHomePage);
 router.get('/signup', renderSignUpPage);
 router.get('/connexion', renderSignInPage, loginUser);
 router.post('/connexion', registerUser);
-router.get('/profil', renderProfilPage);
+router.get('/profil', authMiddleware, renderProfilPage);
 router.post('/profil', loginUser);
 router.get('/logout', logoutUser);
 //*admin
-router.get('/admin', renderAdminPage);
+router.get('/admin', adminMiddleware, renderAdminPage);
 router.post('/admin', renderAdminPage);
 //*tag
 router.get('/tags', tagList);

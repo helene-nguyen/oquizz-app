@@ -124,8 +124,8 @@ const userController = {
     async renderProfilPage(req, res) {
         try {
             let userRegistered = req.session.user;
-            //ternary operator
-            req.session.user && req.session.user.role === 'user' ? res.render('pages/profil', {
+            //ternary operator //todo check with Fredo
+            req.session.user && req.session.user.role === 'user' || 'admin' ? res.render('pages/profil', {
                 userRegistered
             }) : res.redirect('/connexion');
 

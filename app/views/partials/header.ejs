@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="en">
-
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -29,7 +28,6 @@
             <% if (locals.user) { %>
             <a class="p-2 text-white" href="/profil">Mon profil</a>
             <a class="p-2 text-white" href="/logout">Se déconnecter</a>
-            <p><%= locals.user.password %> </p> <!-- TEST -->
             <% } else { %>
             <a class="p-2 text-white" href="/signup">S'inscrire</a>
             <a class="p-2 text-white" href="/connexion">Se connecter</a>

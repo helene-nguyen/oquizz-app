@@ -9,11 +9,7 @@ const {
 //~import DB
 const sequelize = require('./getConnexion');
 
-class User extends Model {
-    get fullName() { //en mettant get, on crée un getter pour l'utiliser directement dans notre code ejs
-        return `${this.firstname} ${this.lastname}` 
-    }
-};
+class User extends Model {/*accessible que si on a une instance d'utilisateur*/};
 
 User.init({
     //~relations
@@ -27,11 +23,6 @@ User.init({
         type: Sequelize.TEXT,
         allowNull: false,
         unique: true,
-        /* validate: {
-            isEmail: {
-                msg: "L'addresse e-mail doit être dans un format valide"
-            }
-        } */
     },
     password: {
         type: Sequelize.TEXT,
@@ -39,11 +30,18 @@ User.init({
     },
     firstname: {
         type: Sequelize.TEXT,
-        allowNull: true
+        allowNull: true,
+
     },
     lastname: {
         type: Sequelize.TEXT,
         allowNull: true
+    },
+    fullname: {
+        type: DataTypes.VIRTUAL,
+        get() {
+            return `${this.firstname} ${this.lastname}`;
+        }
     },
     role: {
         type: Sequelize.TEXT,

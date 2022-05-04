@@ -7,7 +7,7 @@ const express = require('express'),
     router = require('./app/routers'),
     errorController = require('./app/controllers/errorController');
 const session = require('express-session');
-const userMiddleware = require('./app/middlewares/userMiddleware');
+const userMiddleware = require('./app/middlewares/user');
 
 //~url encoded
 app.use(express.json());

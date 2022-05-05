@@ -23,17 +23,19 @@
         <h1 class="display-4 my-0 mr-md-auto font-weight-normal"><a class="p-2 text-white" href="/">O'quiz</a></h1>
         <nav class="my-2 my-md-0 mr-md-3">
             <a class="p-2 text-white" href="/">Accueil</a>
+
+
+
+            <% if (user) { %>
             <a class="p-2 text-white" href="/tags">Sujets</a>
-
-
-            <% if (locals.user) { %>
             <a class="p-2 text-white" href="/logout">Se déconnecter</a>
-            <button type="button" class="btn btn-outline-dark"><a class="p-2 text-white" href="/profil">Mon profil</a></button>
+            <button type="button" class="btn btn-outline-dark"><a class="p-2 text-white" href="/profil">Mon
+                    profil</a></button>
             <% } else { %>
             <a class="p-2 text-white" href="/signup">S'inscrire</a>
             <a class="p-2 text-white" href="/connexion">Se connecter</a>
             <% } %>
-            <% if (locals.user.role === 'admin') { %>
+            <% if (user.role === 'admin') { %>
             <button type="button" class="btn btn-outline-dark"><a class="p-2 text-white"
                     href="/admin">Admin</a></button>
             <% } %>

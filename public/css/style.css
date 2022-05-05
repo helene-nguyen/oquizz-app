@@ -137,8 +137,29 @@ ul{
 }
 
 ul li{
-  color: #AAAAAA;
   display: block;
   position: relative;
   width: 100%;
+}
+
+input, label {
+  cursor: pointer;
+}
+
+input {
+  margin-right: 2em;
+}
+
+.quizz-underline {
+  text-decoration: underline;
+  line-height: 2em;
+}
+
+.table {
+  border-left: 8px solid;
+    color: black;
+}
+
+.list-group-item {
+  text-align: left;
 }

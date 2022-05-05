@@ -1,7 +1,10 @@
 <%- include('../partials/header') %>
 
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-    <h2 class="h1 display-4">Votre quiz</h2>
+
+
+    <h2 class="quizz-underline h2 display-4 mb-5">
+        <%= locals.user ? 'Votre Quiz' : 'Veuillez créer un compte pour jouer !' %></h2>
     <h2><%= quiz.title %> </h2>
     <hr>
 
@@ -19,8 +22,33 @@
 
 <hr>
 
-<div class="card-deck d-flex flex-column mb-3 text-center">
-    <h3> Nombre de questions : <%= quiz.questions.length %></h3>
+<div class="card-deck d-flex flex-column mb-3 justify-content-center text-center">
+    <h3 class="pb-md-5"> Nombre de questions : <%= quiz.questions.length %></h3>
+
+    <% if (answers) { %>
+
+    <div class="card mb-4 shadow-sm d-flex flex-column mb-2 bg-light text-dark">
+        <div class="card-body d-flex flex-column justify-content-between">
+            <p>Tu as eu au total <%= answers.goodAnswersCount %> réponse(s) juste(s) et <%= answers.wrongAnswersCount %>
+                réponse(s) fausse(s) sur <%= Number(answers.goodAnswersCount) + Number(answers.wrongAnswersCount) %>
+                questions
+            </p>
+        </div>
+
+        <div class="card-footer">
+            <p style="color:green; margin: auto;">
+                <%= answers.goodAnswers.length === 0 ? answers.goodAnswers = "Aucune bonne réponse" : `Bonne(s) réponse(s) : ${answers.goodAnswers} `%>
+            </p>
+    
+        </div>
+        <div class="card-footer">
+            <p style="color:red;margin: auto;">
+                <%= answers.userAnswers.length === 0 ? answers.userAnswers = "Aucune mauvaise réponse" : `Mauvaise(s) réponse(s) : ${answers.userAnswers} `%>
+            </p>
+        </div>
+    </div>
+    
+    <% } %>
     <hr>
     <div class="col-12 d-flex flex-column">
 
@@ -39,9 +67,12 @@
                         <ul>
                             <% question.answers.sort(()=> Math.random()-0.5).forEach(answer => { %>
 
-                            <li>
-                                <input type="radio" id="<%= answer.id %>" name="<%= question.id %>" value="<%= answer.id %>">
-                                <label for="<%= answer.id %>"><%= answer.description %></label>
+                            <li class="list-group-item">
+                                <input type="radio" id="<%= answer.id %>" name="<%= question.id %>"
+                                    value="<%= answer.id %>"
+                                    <%= locals.user ? '' : `style=user-select:none;` && 'disabled' %>>
+                                <label <%= locals.user ? `style=color:#000;` : `style=color:#c7c7c7;`%>
+                                    for="<%= answer.id %>"><%= answer.description %></label>
                             </li>
 
                             <% }) %>
@@ -50,11 +81,17 @@
                     </article>
 
                 </div>
+
+                <div class="card-footer text-muted">
+                    Réponses ICI
+                </div>
             </div>
 
             <% }) %>
 
+
             <button type="submit" class="btn btn-outline-dark my-2 d-grid gap-2 col-6 mx-auto">Valider</button>
+
 
         </form>
 

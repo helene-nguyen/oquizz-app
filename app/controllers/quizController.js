@@ -15,7 +15,9 @@ const quizController = {
 
     async tagList(req, res) {
         try {
-            const tags = await Tag.findAll();
+            const tags = await Tag.findAll({
+                order: ['name']
+            });
 
             res.render('pages/tags', {
                 title: 'Sujets',
@@ -39,6 +41,7 @@ const quizController = {
             const tag = await Tag.findByPk(tagId);
 
             const quizByTag = await Quiz.findAll({
+                order: ['title'],
                 include: {
                     association: 'quiz_id_list',
                     include: [{
@@ -86,8 +89,8 @@ const quizController = {
                     }
                 ]
             });
-            //Status 200 everything is ok
-            // res.status(200).json(quiz);
+
+            res.locals.answers = req.session.answers;
 
             res.render('pages/quiz', {
                 quiz
@@ -99,8 +102,36 @@ const quizController = {
     },
 
     async quizPlay(req, res) {
+        const quizId = req.params.id;
 
-        const resultQuiz = [];
+        const quiz = await Quiz.findByPk(quizId, {
+            include: [{
+                    association: 'questions', //alias in index.js or model: Question
+                    include: ['level', { //include 2 tables
+                        model: Answer,
+                        as: 'answers',
+                        attributes: ['id', 'description'] //what we want
+                    }]
+                },
+                {
+                    model: Tag,
+                    as: 'tags',
+                    attributes: ['id', 'name']
+                },
+                {
+                    model: User,
+                    as: 'author',
+                    attributes: ['firstname', 'lastname']
+                }
+            ]
+        });
+
+        //^locals
+        req.session.quizInfos = quiz;
+        
+        const userAnswers = [];
+        const goodAnswers = [];
+
         let goodAnswersCount = 0;
         let wrongAnswersCount = 0;
 
@@ -116,24 +147,28 @@ const quizController = {
                 }
             });
 
-            console.log(wrongAnswers);
-
-            if (Number(value) === question.good_answer.id) {
+            /* if (Number(value) === question.good_answer.id) {
                 goodAnswersCount++;
                 resultQuiz.push(`${question.question} ${question.good_answer.description} est la bonne réponse`)
-            }
-
-            if (Number(value) !== question.good_answer.id) {
+            } else {
                 wrongAnswersCount++
                 resultQuiz.push(`${question.question} Tu as choisi ${wrongAnswers.description} et c'est faux !`);
-            }
+            } */
+        
+
+            Number(value) === question.good_answer.id ? (goodAnswersCount++, goodAnswers.push(question.good_answer.description)) : (wrongAnswersCount++, userAnswers.push(wrongAnswers.description));
+
+            /* Number(value) === question.good_answer.id ? goodAnswers.push(question.good_answer.description) : userAnswers.push(wrongAnswers.description); */
+
+            req.session.answers = {
+                goodAnswersCount,
+                wrongAnswersCount,
+                userAnswers,
+                goodAnswers
+            };
         }
 
-        res.json({
-            result: `Tu as ${goodAnswersCount} bonnes réponses et ${wrongAnswersCount} mauvaises réponses sur ${resultQuiz.length} questions`,
-            resultQuiz
-        });
-
+        res.redirect(`/quiz/${quizId}`);
 
     }
 };

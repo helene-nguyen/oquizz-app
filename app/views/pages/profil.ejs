@@ -1,7 +1,63 @@
 <%- include('../partials/header') %>
 
-<h2>Welcome <%= userRegistered.firstname %> <%= userRegistered.lastname %> !</h2>
+<h2 class="pb-2 border-bottom">Bienvenue <%= user.firstname %> <b><%= user.lastname.toUpperCase() %></b></h2>
 
-<hr>
+
+<div class=" container px-4 py-5" id="featured-3">
+
+  <div class=" row row-3">
+
+    <div class="card " style="margin:0 0.1rem; padding:1rem;">
+      <div class="feature-icon bg-primary bg-gradient">
+        <svg class="bi">
+          <use xlink:href="#collection" /></svg>
+      </div>
+      <h4>Mes informations :</h4>
+      <p><u>Nom</u> : <%= user.lastname %></p>
+      <p><u>Prénom</u> : <%= user.firstname %></p>
+      <p><u>Email</u> : <%= user.email %></p>
+      <a href="#" class="icon-link">
+        Modifier mon profil
+
+      </a>
+    </div>
+
+    <div class="card" style="margin:0 0.1rem; padding:1rem;">
+      <div class="feature-icon bg-primary bg-gradient">
+        <svg class="bi">
+          <use xlink:href="#people-circle" /></svg>
+      </div>
+      <h4>Dernier quiz rajouté :</h4>
+      <p>Titre du quiz</p>
+      <p>Les tags</p>
+      <p>auteur</p>
+      <a href="#" class="icon-link">
+        Jouer
+
+      </a>
+    </div>
+
+    <% if (quizInfos) { %>
+    <div class="card " style="margin:0 0.1rem; padding:1rem;">
+      <div class="feature-icon bg-primary bg-gradient">
+        <svg class="bi">
+          <use xlink:href="#toggles2" /></svg>
+      </div>
+      <h4>Resultat du dernier Quiz</h4>
+
+      <p><%= quizInfos.title %> </p>
+      <p>Score : <%= answers.goodAnswersCount %>  sur <%= answers.goodAnswersCount + answers.wrongAnswersCount %></p>
+
+      <a href="/quiz/<%= quizInfos.id %> " class="icon-link">
+        Recommencer
+
+      </a>
+    </div>
+    <% } %>
+
+
+  </div>
+</div>
+
 
 <%- include('../partials/footer') %>

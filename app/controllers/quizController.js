@@ -37,7 +37,6 @@ const quizController = {
             /* if (isNaN(id)) {
                 throw new Error('Problème avec tagId'); 
             } */
-
             const tag = await Tag.findByPk(tagId);
 
             const quizByTag = await Quiz.findAll({
@@ -90,10 +89,12 @@ const quizController = {
                 ]
             });
 
-            res.locals.answers = req.session.answers;
+            let answers = req.session.answers;
+            delete req.session.answers;
 
             res.render('pages/quiz', {
-                quiz
+                quiz,
+                answers
             });
 
         } catch (err) {
@@ -128,7 +129,7 @@ const quizController = {
 
         //^locals
         req.session.quizInfos = quiz;
-        
+
         const userAnswers = [];
         const goodAnswers = [];
 
@@ -154,7 +155,6 @@ const quizController = {
                 wrongAnswersCount++
                 resultQuiz.push(`${question.question} Tu as choisi ${wrongAnswers.description} et c'est faux !`);
             } */
-        
 
             Number(value) === question.good_answer.id ? (goodAnswersCount++, goodAnswers.push(question.good_answer.description)) : (wrongAnswersCount++, userAnswers.push(wrongAnswers.description));
 
@@ -166,6 +166,12 @@ const quizController = {
                 userAnswers,
                 goodAnswers
             };
+
+            req.session.lastAnswers = {
+                goodAnswersCount,
+                wrongAnswersCount
+            };
+
         }
 
         res.redirect(`/quiz/${quizId}`);

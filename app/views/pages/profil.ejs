@@ -46,7 +46,7 @@
       <h4>Resultat du dernier Quiz</h4>
 
       <p><%= quizInfos.title %> </p>
-      <p>Score : <%= answers.goodAnswersCount %>  sur <%= answers.goodAnswersCount + answers.wrongAnswersCount %></p>
+      <p>Score : <%= answers.goodAnswersCount %> sur <%= answers.goodAnswersCount + answers.wrongAnswersCount %></p>
 
       <a href="/quiz/<%= quizInfos.id %> " class="icon-link">
         Recommencer
@@ -54,8 +54,6 @@
       </a>
     </div>
     <% } %>
-
-
   </div>
 </div>
 

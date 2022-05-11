@@ -61,7 +61,6 @@ const userController = {
             const errorRegister = req.session.errorRegister;
             const userCreated = req.session.userCreated;
 
-
             //session
             wrongPwd === 'Vous avez rentré le mauvais mot de passe, veuillez recommencer.' ? req.session.wrongPwd = '' : wrongPwd;
 
@@ -142,10 +141,8 @@ const userController = {
     async renderProfilPage(req, res) {
         try {
             let userRegistered = req.session.user;
-            const quizInfos = req.session.quizInfos;
-            const answers = req.session.answers;
-
-            console.log(answers);
+            let quizInfos = req.session.quizInfos;
+            let answers = req.session.lastAnswers;
 
             req.session.user && req.session.user.role === 'user' || 'admin' ? res.render('pages/profil', {
                 userRegistered,
@@ -165,7 +162,6 @@ const userController = {
                 email,
                 password
             } = req.body;
-
 
             //^email
             if (!emailValidator.validate(email)) {

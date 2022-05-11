@@ -11,7 +11,7 @@ const mainController = {
 
     async renderHomePage(req, res) {
         try {
-            console.log(req.session.user);
+            
             const quizList = await Quiz.findAll({
                 include: [{
                     association: 'author',

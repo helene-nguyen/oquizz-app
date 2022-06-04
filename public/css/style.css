@@ -13,6 +13,11 @@
   border-color: rgb(151, 0, 151);
 }
 
+.card-body-update,
+.card-body-delete {
+  display: none;
+}
+
 .bg-primary {
   background-color: #ad4ce6 !important;
 }
@@ -130,19 +135,20 @@
 }
 
 
-ul{
+ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-ul li{
+ul li {
   display: block;
   position: relative;
   width: 100%;
 }
 
-input, label {
+input,
+label {
   cursor: pointer;
 }
 
@@ -157,7 +163,7 @@ input {
 
 .table {
   border-left: 8px solid;
-    color: black;
+  color: black;
 }
 
 .list-group-item {

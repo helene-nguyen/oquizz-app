@@ -1,27 +1,42 @@
 <%- include('../partials/header') %>
 
 
-    <h2 class="mb-5">Administrateur</h2>
+<h2 class="mb-5">Administrateur</h2>
 
-    <div class="card text-center">
-        <div class="card-header">
-            <button type="radio" name="btn-admin" class="btn-create btn btn-outline-primary px-4 mx-2">Create</button>
-            <button type="radio" name="btn-admin" class="btn-update btn btn-outline-success px-4 mx-2">Update</button>
-            <button type="radio" name="btn-admin" class="btn-delete btn btn-outline-danger px-4 mx-2">Delete</button>
-        </div>
+<section class="card text-center">
+  <div class="card-header">
+    <button type="radio" name="btn-admin" class="btn-create btn btn-outline-primary px-4 mx-2 checked" >Create</button>
+    <button type="radio" name="btn-admin" class="btn-update btn btn-outline-success px-4 mx-2">Update</button>
+    <button type="radio" name="btn-admin" class="btn-delete btn btn-outline-danger px-4 mx-2">Delete</button>
+  </div>
 
+  <!-- CREATION -->
+  <article class="card-body-create">
 
-        <div class="card-body">
-          <h5 class="card-title">Special title treatment</h5>
-          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+    <h5 class="card-title">Create</h5>
+    <p class="card-text"></p>
 
+  </article>
+  <!-- UPDATE -->
 
-          <a href="#" class="btn btn-primary">Go somewhere</a>
+  <article class="card-body-update">
 
+    <h5 class="card-title">Update</h5>
+    <p class="card-text"></p>
 
-        </div>
-      </div>
-   
+  </article>
+
+  <!-- DELETE -->
+  <article class="card-body-delete">
+
+    <h5 class="card-title">Delete</h5>
+    <p class="card-text"></p>
+
+  </div>
+
+  <a href="#" class="btn btn-primary" type="submit">Done !</a>
+</section>
+
 <hr>
 
 <%- include('../partials/footer') %>
